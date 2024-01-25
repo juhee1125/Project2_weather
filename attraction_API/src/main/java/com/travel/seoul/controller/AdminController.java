@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -122,46 +123,29 @@ public class AdminController {
 	
 	// memberList.jsp에서 topic,keyword 받아옴(검색)
 	@GetMapping("/search")
-	public String search(@RequestParam("topic") String topic, @RequestParam("keyword") String keyword, HttpSession session) {
-		System.out.println(topic);
-		System.out.println(keyword);
-		
+	public String search(String topic, String keyword, HttpSession session) {
 		List<UserVO> list = service.list();
-		List<UserVO> searchList = new ArrayList<>();
 		
 		// 키워드가 해당 주제에 포함되어있으면 List에 추가
-		for (UserVO user:list) {
-			switch (topic) {
-				case "id":
-	                if (keyword.equals(user.getUserID())) {
-	                	searchList.add(user);
+		List<UserVO> searchList = list.stream()
+	            .filter(user -> {
+	                switch (topic) {
+	                    case "id":
+	                        return keyword.equals(user.getUserID());
+	                    case "name":
+	                        return keyword.equals(user.getUserName());
+	                    case "sex":
+	                        return keyword.equals(user.getUserSex());
+	                    case "age":
+	                        return keyword.equals(user.getUserAge());
+	                    case "area":
+	                        return keyword.equals(user.getUserArea1()) || keyword.equals(user.getUserArea2()) || keyword.equals(user.getUserArea3());
+	                    default:
+	                        return false;
 	                }
-	                break;
-				case "name":
-					if (keyword.equals(user.getUserName())) {
-						searchList.add(user);
-					}
-					break;
-				 case "sex":
-					if (keyword.equals(user.getUserSex())) {
-						searchList.add(user);
-					}
-					break;
-				 case "age":
-					if (keyword.equals(user.getUserAge())) {
-						searchList.add(user);
-					}
-					break;
-				 case "area":
-					if (keyword.equals(user.getUserArea1()) || keyword.equals(user.getUserArea2()) || keyword.equals(user.getUserArea3())) {
-						searchList.add(user);
-					}
-					break;
-				 default:
-		                System.out.println("결과없음");
-		            break;
-			}
-		}
+	            })
+	            .collect(Collectors.toList());
+		
 		session.setAttribute("user_searchList", searchList);
 		System.out.println("User List Size: " + searchList.size());
 		

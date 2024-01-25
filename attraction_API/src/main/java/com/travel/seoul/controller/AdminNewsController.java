@@ -45,7 +45,7 @@ public class AdminNewsController {
 	
 	// Main_admin.jsp에서 ID와 URL 받아옴(URL 수정)
     @GetMapping("/editlink")
-    public String editImage(@RequestParam Integer id, @RequestParam String url, HttpSession session) {
+    public String editImage(Integer id, String url, HttpSession session) {
         System.out.println("수정된 id: "+id);
     	System.out.println("수정된 url: "+url);
         
@@ -129,7 +129,7 @@ public class AdminNewsController {
     
     // Main_admin.jsp에서 URL과 이미지정보 받아옴(뉴스 추가)
     @PostMapping("/insertNews")
-    public String insertNews(@RequestParam("imageFile") MultipartFile imageFile, @RequestParam String url, HttpSession session) {
+    public String insertNews(MultipartFile imageFile, String url, HttpSession session) {
         try {
             if (imageFile.isEmpty()) {
                 return "admin/Main_admin";
@@ -183,7 +183,7 @@ public class AdminNewsController {
 
     // Main_admin.jsp에서 ID 받아옴(뉴스 삭제)
     @GetMapping("/deleteNews")
-    public String deleteNews(@RequestParam("id") Integer id, HttpSession session) {
+    public String deleteNews(Integer id, HttpSession session) {
     	System.out.println("뉴스삭제");
     	List<NewsVO> imageList = (List<NewsVO>) session.getAttribute("imageList");
 

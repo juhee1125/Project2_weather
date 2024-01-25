@@ -8,7 +8,6 @@ $("body").on("mousewheel", function (e) {
     }else if(wheel > 0){
         page--;
     }
-    console.log(page);
     if(page <= 0){
         page=0;
         $('#btn_gotop').hide();
@@ -18,17 +17,9 @@ $("body").on("mousewheel", function (e) {
     }else{
         $('#btn_gotop').show();
     }
-	if (page == 0){
-		var offset = $('.container:nth-child(1)').offset();
-	}else if (page == 1){
-		var offset = $('.container:nth-child(2)').offset();
-	}else if (page == 2){
-		var offset = $('.container:nth-child(3)').offset();
-	}else if (page == 3){
-		var offset = $('.container:nth-child(4)').offset();
-	}else if (page == 4){
-		var offset = $('.container:nth-child(5)').offset();
-	}
+
+	var offset = $('.container:nth-child(' + (page + 1) + ')').offset();
+
 	$('html').animate({scrollTop : offset.top}, 400);
 });
 
@@ -37,3 +28,4 @@ $('#btn_gotop').click(function(){
 	page = 0;
     return false;
 });
+
